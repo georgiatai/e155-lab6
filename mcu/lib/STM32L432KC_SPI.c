@@ -8,10 +8,6 @@
 
 void initSPI(int br, int cpol, int cpha){
 
-    // enable spi and gpio clocks
-
-    // cs pin setup to low by digital write (GPIO done prior)
-
     // Set serial clock baud rate
     SPI1->CR1 |= _VAL2FLD(SPI_CR1_BR, br);
 
@@ -46,11 +42,11 @@ char spiSendReceive(char send){
     while(!(SPI1->SR & SPI_SR_TXE));
 
     // Send data
-    *((__IO uint8_t *)&SPI1->DR) = send;
+    *((volatile char *)&SPI1->DR) = send;
 
     // Wait until RX buffer is not empty
     while(!(SPI1->SR & SPI_SR_RXNE));
 
     // Read and return received data
-    return *((__IO uint8_t *)&SPI1->DR);
+    return *((volatile char *)&SPI1->DR);
 }
