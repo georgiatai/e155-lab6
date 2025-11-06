@@ -61,26 +61,26 @@ int updateLEDStatus(char request[])
 
 int updateResStatus(char request[]) {
 
-	// send resolution setting command based on request
-	if (inString(request, "res8") == 1) {
-    return 0xE0;
+  // send resolution setting command based on request
+  if (inString(request, "res8") == 1) {
+    return 8;
   }
   else if (inString(request, "res9") == 1) {
-    return 0xE2;
+    return 9;
   }
   else if (inString(request, "res10") == 1) {
-    return 0xE4;
+    return 10;
   }
   else if (inString(request, "res11") == 1) {
-    return 0xE6;
+    return 11;
   }
   else if (inString(request, "res12") == 1) {
-    return 0xE8;
-	}
+    return 12;
+  }
 
 }
 
-configurePins() {
+void configurePins() {
 
   // set pin modes
   pinMode(PB1, GPIO_OUTPUT); // DS1722 CE pin
@@ -116,8 +116,9 @@ int main(void) {
   
   USART_TypeDef * USART = initUSART(USART1_ID, 125000);
 
-  // TODO: Add SPI initialization code
-  initSPI(0b011, 0, 1);
+  // SPI and temperature sensor initialization code
+  initSPI(0b111, 0, 1);
+  initTempSensor();
 
   while(1) {
     /* Wait for ESP8266 to send a request.
@@ -136,9 +137,9 @@ int main(void) {
       request[charIndex++] = readChar(USART);
     }
 
-    // TODO: Add SPI code here for reading temperature
+    // Temperature read and resolution set
     char resolution = updateResStatus(request);
-    initTempSensor(resolution);
+    setResolution(resolution);
     double temperature = readTemp();
     char temperatureStr[32];
     sprintf(temperatureStr, "Temperature: %.4f deg C", temperature);

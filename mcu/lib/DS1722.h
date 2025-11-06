@@ -15,9 +15,12 @@
 // Function prototypes
 ///////////////////////////////////////////////////////////////////////////////
 
-/* Initialize the DS1722 temperature sensor to a specific resolution 
- *    -- resolution: hex byte for resolution in the config register */ 
-void initTempSensor(char resolution);
+/* Initialize the DS1722 temperature sensor */ 
+void initTempSensor();
+
+/* Set the DS1722 temperature sensor to a specific resolution 
+ *    -- resolution: hex byte for resolution in the config register */
+void setResolution(char resolution);
 
 /* Read MSB & LSB, then calculate the temperature */
 double readTemp();

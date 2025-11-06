@@ -7,37 +7,50 @@
 #include "DS1722.h"
 
 // initialize DS1722
-void initTempSensor(char resolution){
+void initTempSensor() {
 
     // set chip enable (CE) pin high
     digitalWrite(DS1722_CE_PIN, PIO_HIGH);
+
+    spiSendReceive(0x80);
+    spiSendReceive(0xE0);
+
+    // set chip enable (CE) pin low
+    digitalWrite(DS1722_CE_PIN, PIO_LOW);
+
+}
+
+void setResolution(char resolution) {
+    
+    // set chip enable (CE) pin high
+    digitalWrite(DS1722_CE_PIN, PIO_HIGH);
+    spiSendReceive(0x80);
 
     // send write resolution command based on desired resolution
     // config register = {3'b111, 1SHOT, R2, R1, R0, SD}
     if (resolution == 8) {
         spiSendReceive(0xE0);      // {R2,R1,R0} = 000
-        delay_millis(TIM15, 400);
+        //delay_millis(TIM15, 100);
     }
     else if (resolution == 9) {
         spiSendReceive(0xE2);      // {R2,R1,R0} = 001
-        delay_millis(TIM15, 400);
+        //delay_millis(TIM15, 100);
     }
     else if (resolution == 10) {
         spiSendReceive(0xE4);      // {R2,R1,R0} = 010
-        delay_millis(TIM15, 400);
+        //delay_millis(TIM15, 100);
     }
     else if (resolution == 11) {
         spiSendReceive(0xE6);      // {R2,R1,R0} = 011
-        delay_millis(TIM15, 400);
+        //delay_millis(TIM15, 100);
     }
     else if (resolution == 12) {
         spiSendReceive(0xE8);      // {R2,R1,R0} = 1xx
-        delay_millis(TIM15, 400);
+        //delay_millis(TIM15, 100);
     }
 
     // set chip enable (CE) pin low
     digitalWrite(DS1722_CE_PIN, PIO_LOW);
-
 }
 
 // get temp
@@ -55,7 +68,6 @@ double readTemp(){
     uint8_t lsb = spiSendReceive(0x00);
     digitalWrite(DS1722_CE_PIN, PIO_LOW);
 
-    // double temp2 = (double) msb + ((double) lsb / 256.0);
     // calculate temperature
     uint16_t rawdata = (msb << 8) | lsb;  // raw data of 12-bit 2's complement
     int16_t  rawtemp = rawdata >> 4;
