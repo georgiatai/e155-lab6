@@ -92,6 +92,7 @@ configurePins() {
   digitalWrite(PB1, PIO_LOW);
 
   // Set alternate function to AF5 (SPI1) for PB3, PB4, PB5
+  GPIOB->AFR[0] &= ~((0xF << 12) | (0xF << 16) | (0xF << 20));
   GPIOB->AFR[0] |= _VAL2FLD(GPIO_AFRL_AFSEL3, 0b0101);
   GPIOB->AFR[0] |= _VAL2FLD(GPIO_AFRL_AFSEL4, 0b0101);
   GPIOB->AFR[0] |= _VAL2FLD(GPIO_AFRL_AFSEL5, 0b0101); 
