@@ -17,7 +17,11 @@ void initSPI(int br, int cpol, int cpha){
     SPI1->CR1 |= _VAL2FLD(SPI_CR1_CPHA, cpha);
 
     // clear lsbfirst bit to set msb first
+<<<<<<< HEAD
     SPI1->CR1 &= ~(SPI_CR1_LSBFIRST);
+=======
+    SPI1->CR1 |= _VAL2FLD(SPI_CR1_LSBFIRST, 0);
+>>>>>>> a5f3fd1eb68c8979c5762792fd2e50127369696e
 
     // Set MCU as master
     SPI1->CR1 |= _VAL2FLD(SPI_CR1_SSM, 1);
